@@ -20,8 +20,12 @@ namespace TickTick.Api.Controllers
         public IActionResult Get(Guid id)
         {
             //TODO: Haal een persoon op
+            Location personLocation = new Location("Kerkstraat", "1", "Gent", "9000", "Belgium");
             Person person = new Person("Kevin", "DeRudder", "kevin.derudder@gmail.com");
-            return Ok(person);
+            person.Addresses = new List<Location>{
+                personLocation
+            };
+            return Ok(person.ConvertToDto());
         }
     }
 }

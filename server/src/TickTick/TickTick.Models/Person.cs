@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TickTick.Models.Dtos;
 
 namespace TickTick.Models
 {
@@ -26,10 +22,11 @@ namespace TickTick.Models
             this.Email = email;
         }
 
-        public void Delete() {
+        public void Delete()
+        {
             this.IsDeleted = true;
         }
-        
+
         public override string ToString()
         {
             return $"{this.FirstName} {this.LastName}";
@@ -41,9 +38,34 @@ namespace TickTick.Models
             {
                 return this.SocialSecurityNumber == other.SocialSecurityNumber;
             }
-            else {
+            else
+            {
                 return this.PublicId == other?.PublicId;
             }
+        }
+
+        public PersonDto ConvertToDto()
+        {
+            return new PersonDto()
+            {
+                PublicId = this.PublicId,
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                MiddleName = this.MiddleName,
+                DateOfBirth = this.DateOfBirth,
+                Email = this.Email,
+                Addresses = this.Addresses.ToList().ConvertAll(
+                                        a => new LocationDto
+                                        {
+                                            Street = a.Street,
+                                            Nr = a.Nr,
+                                            City = a.City,
+                                            State = a.State,
+                                            ZipCode = a.ZipCode,
+                                            Country = a.Country,
+                                            Type = Enum.GetName(typeof(LocationType), a.Type)
+                                        })
+            };
         }
     }
 }
