@@ -1,4 +1,9 @@
-﻿using TickTick.Models.Dtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TickTick.Models.Dtos;
 
 namespace TickTick.Models
 {
@@ -10,9 +15,9 @@ namespace TickTick.Models
         public string? MiddleName { get; set; }
         public string? SocialSecurityNumber { get; set; }
         public DateTime? DateOfBirth { get; set; }
+        public DateTime? DateOfDeath { get; set; }
         public string? PhoneNumber { get; set; }
         public string Email { get; set; }
-        public IList<Location>? Addresses { get; set; }
         public bool IsDeleted { get; private set; }
 
         public Person(string firstName, string lastName, string email)
@@ -20,6 +25,15 @@ namespace TickTick.Models
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Email = email;
+        }
+
+        public void Update(PersonDto dto)
+        {
+            this.FirstName = dto.FirstName;
+            this.LastName = dto.LastName;
+            this.MiddleName = dto.MiddleName;
+            this.DateOfBirth = dto.DateOfBirth;
+            this.Email = dto.Email;
         }
 
         public void Delete()
@@ -53,19 +67,13 @@ namespace TickTick.Models
                 LastName = this.LastName,
                 MiddleName = this.MiddleName,
                 DateOfBirth = this.DateOfBirth,
-                Email = this.Email,
-                Addresses = this.Addresses.ToList().ConvertAll(
-                                        a => new LocationDto
-                                        {
-                                            Street = a.Street,
-                                            Nr = a.Nr,
-                                            City = a.City,
-                                            State = a.State,
-                                            ZipCode = a.ZipCode,
-                                            Country = a.Country,
-                                            Type = Enum.GetName(typeof(LocationType), a.Type)
-                                        })
+                Email = this.Email
             };
+        }
+
+        public void CreatePublicId()
+        {
+            this.PublicId = Guid.NewGuid();
         }
     }
 }

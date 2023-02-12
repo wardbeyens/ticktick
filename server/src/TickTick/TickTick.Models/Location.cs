@@ -49,7 +49,6 @@ namespace TickTick.Models
             this.State = state;
         }
 
-
         public override string ToString()
         {
             return $"{this.Street} {this.Nr}, {this.City}";
