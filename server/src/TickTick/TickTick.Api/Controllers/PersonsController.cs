@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TickTick.Api.Dtos;
+using TickTick.Api.RequestHandlers;
 using TickTick.Api.ResponseWrappers;
 using TickTick.Api.Services;
 using TickTick.Models;
@@ -10,12 +12,13 @@ namespace TickTick.Api.Controllers
     [Route("v{v:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     [ApiController]
-    public class PersonsController : ControllerBase
+    public class PersonsController : ApiControllerBase
     {
         private readonly IPersonsService svc;
         private readonly IRepository<Person> repo;
 
-        public PersonsController(IPersonsService service, IRepository<Person> repo)
+        public PersonsController(IPersonsService service, IRepository<Person> repo, IMediator mediator)
+            :base(mediator)
         {
             this.svc = service;
             this.repo = repo;
@@ -29,6 +32,10 @@ namespace TickTick.Api.Controllers
         [ProducesResponseType(typeof(IEnumerable<PersonDto>), 200)]
         public async Task<IActionResult> Get()
         {
+
+            return await ExecuteRequest(new GetAllPersonsRequest());
+
+            /*
             try
             {
                 var persons = await repo.GetAllAsync(p => p.IsDeleted == false);
@@ -49,6 +56,7 @@ namespace TickTick.Api.Controllers
                 r.Status = System.Net.HttpStatusCode.InternalServerError;
                 return StatusCode(500, r);
             }
+            */
 
         }
 
