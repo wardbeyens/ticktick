@@ -3,31 +3,30 @@ using TickTick.Models;
 
 namespace TickTick.Api.Services
 {
-    public class SongService : ISongsService
+    public class SongsService : ISongsService
     {
-        SongDto ISongsService.AddSong(SongDto dto)
+        public SongDto AddSong(SongDto dto)
         {
             Song song = new Song(dto.Title, dto.Artist);
             // iets?
             return song.ConvertToDto();
         }
-        
-        SongDto ISongsService.UpdateSong(long id, SongDto dto)
+
+        public SongDto UpdateSong(long id, SongDto dto)
         {
             Song song = new Song(dto.Title, dto.Artist);
             song.Update(dto.Title, dto.Artist, dto.Duration, dto.SequenceNumber);
-
+            return song.ConvertToDto();
         }
 
-        void ISongsService.DeleteSong(Guid id)
+        public void DeleteSong(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        void ISongsService.DeleteSong(Song song)
+        public void DeleteSong(Song song)
         {
             song.Delete();
         }
-
     }
 }

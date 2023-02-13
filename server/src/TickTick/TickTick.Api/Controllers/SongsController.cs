@@ -137,7 +137,7 @@ namespace TickTick.Api.Controllers
             SongDto newSong = svc.UpdateSong(id, song);
 
             Song s = new Song(song.Title, song.Artist);
-            repo.Add(s);
+            repo.Update(s);
             int i = await repo.SaveAsync();
 
             return Ok(newSong);

@@ -10,6 +10,9 @@ namespace TickTick.Api
         {
             services.AddTransient<IPersonsService, PersonsService>();
             services.AddTransient<IRepository<Person>, Repository<Person>>();
+
+            services.AddTransient<ISongsService, SongsService>();
+            services.AddTransient<IRepository<Song>, Repository<Song>>();
         }
     }
 }
