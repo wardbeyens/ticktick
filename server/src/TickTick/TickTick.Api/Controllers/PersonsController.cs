@@ -69,15 +69,19 @@ namespace TickTick.Api.Controllers
         [ProducesResponseType(typeof(PersonDto), 200)]
         public async Task<IActionResult> Get(Guid id)
         {
+            return await ExecuteRequest(new GetPersonRequest(id));
+            /*
+            
             //TODO: Haal een persoon op
             //Person person = new Person("Kevin", "DeRudder", "kevin.derudder@gmail.com");
-
+            
             var person = await repo.GetAsync(p => p.PublicId == id);
 
             Response<Person> resp = new Response<Person>();
             resp.Data = person;
 
             return Ok(person.ConvertToDto());
+            */
         }
 
         /*
@@ -106,17 +110,8 @@ namespace TickTick.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(Guid id)
         {
+            return await ExecuteRequest(new DeletePersonRequest(id));
 
-            var person = await repo.GetAsync(p => p.PublicId == id);
-            if (person == null)
-            {
-                return NotFound();
-            }
-            svc.DeletePerson(person);
-            repo.Delete(person);
-
-            int i = await repo.SaveAsync();
-            return NoContent();
         }
 
         [HttpPost]
@@ -127,11 +122,14 @@ namespace TickTick.Api.Controllers
         [ProducesResponseType(typeof(PersonDto), 201)]
         public async Task<IActionResult> Post([FromBody] AddPersonDto person)
         {
+            return await ExecuteRequest(new AddPersonRequest(person));
+            /*
             PersonDto newP = svc.AddPerson(person);
             Person p = new Person(person.FirstName, person.LastName, person.Email);
             repo.Add(p);
             int i = await repo.SaveAsync();
             return CreatedAtAction(nameof(Get), new { id = newP.PublicId }, newP);
+            */
         }
 
         [HttpPut("{id:guid}")]
@@ -140,15 +138,9 @@ namespace TickTick.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(PersonDto), 200)]
-        public async Task<IActionResult> Put(Guid id, [FromBody] PersonDto person)
+        public async Task<IActionResult> Put(Guid id, [FromBody] UpdatePersonDto person)
         {
-            PersonDto newP = svc.UpdatePerson(id, person);
-
-            Person p = new Person(person.FirstName, person.LastName, person.Email);
-            repo.Add(p);
-            int i = await repo.SaveAsync();
-
-            return Ok(newP);
+            return await ExecuteRequest(new UpdatePersonRequest(id, person));
         }
     }
 }

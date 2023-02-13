@@ -26,5 +26,6 @@ namespace TickTick.Api.Dtos
                 Email = person.Email
             };
         }
+
     }
 }

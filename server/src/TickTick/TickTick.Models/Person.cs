@@ -20,7 +20,7 @@
             this.Email = email;
         }
 
-        public void Update(string firstName, string lastname, string middleName, DateTime? dob, string email)
+        public void Update(string firstName, string lastname, string email, DateTime? dob, string? middleName)
         {
             this.FirstName = firstName;
             this.LastName = lastname;
