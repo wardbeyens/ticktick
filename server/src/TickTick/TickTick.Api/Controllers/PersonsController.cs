@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TickTick.Api.Dtos.Persons;
+using TickTick.Api.Dtos;
 using TickTick.Api.ResponseWrappers;
 using TickTick.Api.Services;
 using TickTick.Models;
-using TickTick.Models.Dtos;
 
 namespace TickTick.Api.Controllers
 {

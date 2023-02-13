@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dtos\Locations\**" />
+    <Content Remove="Dtos\Locations\**" />
+    <EmbeddedResource Remove="Dtos\Locations\**" />
+    <None Remove="Dtos\Locations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
@@ -25,10 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TickTick.Data\TickTick.Data.csproj" />
     <ProjectReference Include="..\TickTick.Models\TickTick.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dtos\Locations\" />
   </ItemGroup>
 
 </Project>

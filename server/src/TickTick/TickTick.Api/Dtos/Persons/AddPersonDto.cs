@@ -1,4 +1,4 @@
-﻿namespace TickTick.Api.Dtos.Persons
+﻿namespace TickTick.Api.Dtos
 {
     public record AddPersonDto
     {

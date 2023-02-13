@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using TickTick.Models.Dtos;
 
 namespace TickTick.Api.ResponseWrappers
 {
