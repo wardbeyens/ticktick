@@ -10,12 +10,12 @@ namespace TickTick.Api.Controllers
     [Route("v{v:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     [ApiController]
-    public class PersonsController : ControllerBase
+    public class SongsController : ControllerBase
     {
-        private readonly IPersonsService svc;
-        private readonly IRepository<Person> repo;
+        private readonly ISongsService svc;
+        private readonly IRepository<Song> repo;
 
-        public PersonsController(IPersonsService service, IRepository<Person> repo)
+        public SongsController(ISongsService service, IRepository<Song> repo)
         {
             this.svc = service;
             this.repo = repo;
@@ -26,24 +26,24 @@ namespace TickTick.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(IEnumerable<PersonDto>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<SongDto>), 200)]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var persons = await repo.GetAllAsync(p => p.IsDeleted == false);
+                var songs = await repo.GetAllAsync(s => s.IsDeleted == false);
 
-                //List<Person> people = new List<Person>();
-                //people.Add(new Person("John", "Doe", "john@mail.com"));
-                //people.Add(new Person("Kevin", "DeRudder", "kevin.derudder@gmail.com"));
+                //List<Song> people = new List<Song>();
+                //people.Add(new Song("John", "Doe", "john@mail.com"));
+                //people.Add(new Song("Kevin", "DeRudder", "kevin.derudder@gmail.com"));
 
-                Response<IEnumerable<Person>> resp = new Response<IEnumerable<Person>>();
-                resp.Data = persons;
+                Response<IEnumerable<Song>> resp = new Response<IEnumerable<Song>>();
+                resp.Data = songs;
                 return Ok(resp);
             }
             catch (Exception ex)
             {
-                Response<IEnumerable<Person>> r = new Response<IEnumerable<Person>>();
+                Response<IEnumerable<Song>> r = new Response<IEnumerable<Song>>();
                 r.Data = null;
                 r.Message = ex.Message;
                 r.Status = System.Net.HttpStatusCode.InternalServerError;
@@ -58,28 +58,28 @@ namespace TickTick.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(PersonDto), 200)]
-        public async Task<IActionResult> Get(Guid id)
+        [ProducesResponseType(typeof(SongDto), 200)]
+        public async Task<IActionResult> Get(long id)
         {
             //TODO: Haal een persoon op
-            //Person person = new Person("Kevin", "DeRudder", "kevin.derudder@gmail.com");
+            //Song song = new Song("Kevin", "DeRudder", "kevin.derudder@gmail.com");
 
-            var person = await repo.GetAsync(p => p.PublicId == id);
+            var song = await repo.GetAsync(s => s.Id == id);
 
-            Response<Person> resp = new Response<Person>();
-            resp.Data = person;
+            Response<Song> resp = new Response<Song>();
+            resp.Data = song;
 
-            return Ok(person.ConvertToDto());
+            return Ok(song.ConvertToDto());
         }
 
         /*
-        [HttpGet("{personId:guid}/locations")]
+        [HttpGet("{songId:guid}/locations")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(IEnumerable<Location>), 200)]
-        public IActionResult GetLocations(Guid personId)
+        public IActionResult GetLocations(Guid songId)
         {
             //TODO: Haal een persoon op
             List<Location> locations = new List<Location>() {
@@ -91,21 +91,21 @@ namespace TickTick.Api.Controllers
         }
         */
 
-        [HttpDelete("{id:guid}")]
+        [HttpDelete("{id:long}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(long id)
         {
 
-            var person = await repo.GetAsync(p => p.PublicId == id);
-            if (person == null)
+            var song = await repo.GetAsync(s => s.Id == id);
+            if (song == null)
             {
                 return NotFound();
             }
-            svc.DeletePerson(person);
-            repo.Delete(person);
+            svc.DeleteSong(song);
+            repo.Delete(song);
 
             int i = await repo.SaveAsync();
             return NoContent();
@@ -116,31 +116,31 @@ namespace TickTick.Api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(PersonDto), 201)]
-        public async Task<IActionResult> Post([FromBody] AddPersonDto person)
+        [ProducesResponseType(typeof(SongDto), 201)]
+        public async Task<IActionResult> Post([FromBody] SongDto song)
         {
-            PersonDto newP = svc.AddPerson(person);
-            Person p = new Person(person.FirstName, person.LastName, person.Email);
-            repo.Add(p);
+            SongDto newSong = svc.AddSong(song);
+            Song s = new Song(song.Title, song.Artist);
+            repo.Add(s);
             int i = await repo.SaveAsync();
-            return CreatedAtAction(nameof(Get), new { id = newP.PublicId }, newP);
+            return CreatedAtAction(nameof(Get), new { id = 99}, newSong);
         }
 
-        [HttpPut("{id:guid}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(PersonDto), 200)]
-        public async Task<IActionResult> Put(Guid id, [FromBody] PersonDto person)
+        [ProducesResponseType(typeof(SongDto), 200)]
+        public async Task<IActionResult> Put(long id, [FromBody] SongDto song)
         {
-            PersonDto newP = svc.UpdatePerson(id, person);
+            SongDto newSong = svc.UpdateSong(id, song);
 
-            Person p = new Person(person.FirstName, person.LastName, person.Email);
-            repo.Add(p);
+            Song s = new Song(song.Title, song.Artist);
+            repo.Add(s);
             int i = await repo.SaveAsync();
 
-            return Ok(newP);
+            return Ok(newSong);
         }
     }
 }

@@ -10,9 +10,18 @@ namespace TickTick.Api.Services
             //TODO: persoon ophalen
             // als persoon null is, 404 teruggeven
             // p.Delete()
-            // save
+            // save            
         }
-        
+
+        public void DeletePerson(Person person)
+        {
+            person.Delete();
+            //TODO: persoon ophalen
+            // als persoon null is, 404 teruggeven
+            // p.Delete()
+            // save            
+        }
+
         public PersonDto AddPerson(AddPersonDto dto)
         {
             Person person = new Person(

@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TickTick.Data\TickTick.Data.csproj" />
     <ProjectReference Include="..\TickTick.Models\TickTick.Models.csproj" />
+    <ProjectReference Include="..\TickTick.Repositories\TickTick.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
