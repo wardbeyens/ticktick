@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TickTick.Data.Extensions;
 using TickTick.Models;
 
 namespace TickTick.Data
@@ -11,6 +12,18 @@ namespace TickTick.Data
 
         public TickTickDbContext(DbContextOptions options) : base(options)
         {
+        }
+
+        public override int SaveChanges()
+        {
+            this.AddAuditableInfo();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            this.AddAuditableInfo();
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

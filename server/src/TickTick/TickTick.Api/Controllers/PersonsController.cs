@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TickTick.Api.Dtos;
 using TickTick.Api.RequestHandlers;
@@ -12,6 +13,7 @@ namespace TickTick.Api.Controllers
     [Route("v{v:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
     [ApiController]
+    [Authorize]
     public class PersonsController : ApiControllerBase
     {
         private readonly IPersonsService svc;

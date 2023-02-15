@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using TickTick.Api;
+using TickTick.Api.Extensions;
 using TickTick.Api.Services;
 using TickTick.Data;
 
@@ -40,7 +41,7 @@ internal class Program
             config.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
             config.AssumeDefaultVersionWhenUnspecified = true;
         });
-
+        builder.Services.ConfigureAuthentication(builder.Configuration);
         builder.Services.RegisterServices();
 
         var app = builder.Build();
